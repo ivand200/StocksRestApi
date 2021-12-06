@@ -1,0 +1,15 @@
+db..sqlite3.sqbpro
+test.py
+indexes/__pycache__/
+indexes/migrations/
+
+myblog/__pycache__/
+indexes/migrations/
+
+rest_auth/__pycache__/
+indexes/migrations/
+
+stocks/__pycache__/
+indexes/migrations/
+
+environ_test.py
