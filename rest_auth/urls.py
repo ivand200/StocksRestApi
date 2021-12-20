@@ -1,8 +1,10 @@
-from django.urls import path
-from rest_auth.views import UserViewSet
+from django.urls import path, include
+from rest_auth.views import UserViewSet, UserCreateSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'user', UserViewSet, basename='userView')
+#router.register(r'user', UserCreateSet, basename='userView')
 
-urlpatterns = router.urls
+urlpatterns = router.urls + [
+
+]

@@ -25,6 +25,8 @@ from myblog.views import get_ip
 from django.conf import settings
 import debug_toolbar
 
+from rest_auth.views import UserCreateSet
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -47,6 +49,8 @@ urlpatterns = [
     path('users/', include('rest_auth.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('ip/', get_ip),
+
+    path('auth/', UserCreateSet.as_view()),
 ]
 
 if settings.DEBUG:

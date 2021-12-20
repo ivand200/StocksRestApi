@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializer import EtfSerializer
+from .serializer import EtfSerializer, EtfBondSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
@@ -29,16 +29,16 @@ class EtfViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class EtfMom(viewsets.ViewSet):
+class EtfBond(viewsets.ViewSet):
     """
     ETFs srted by momentum_3
     """
     authentication_classes = [BasicAuthentication]
     permission_classes = [AllowAny]
-    
+
     def list(self, request):
         queryset = Etf.objects.filter(ticker__in=["LQD", "HYG", "SHV"]).order_by("-momentum_3")
-        serializer = EtfSerializer(queryset, many=True)
+        serializer = EtfBondSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
