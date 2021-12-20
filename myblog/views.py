@@ -18,7 +18,7 @@ from rest_auth.models import User
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
 

@@ -16,7 +16,7 @@ class Stock(models.Model):
     ma10 = models.IntegerField()
     e_p = models.FloatField()
     div_p = models.FloatField()
-    index = models.ForeignKey(Index, on_delete=models.CASCADE)
+    index = models.ForeignKey(Index, related_name="indexes", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.ticker

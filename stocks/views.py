@@ -9,7 +9,8 @@ from rest_framework import permissions
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
-from .serializer import StockSerializer
+from .serializer import (StockSerializer, StockAvgMomentumSerializer,
+                         StockDivSerializer, StockMomSerializer)
 from rest_framework.parsers import JSONParser
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
@@ -32,6 +33,39 @@ class StockViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+class DJ30Invest(APIView):
+    """
+    Get DJ30 stocks list ordered by strategy
+    """
+    authenticated_classes = [BasicAuthentication]
+    permission_classes = [AllowAny]
+
+    def get(self, request, strategy=None):
+        index = Index.objects.filter(name="DJ30").values_list("id", flat=True)
+        if strategy == "avgmom":
+            queryset = Stock.objects.filter(index_id=index[0]).order_by("-momentum_avg")[:6]
+        elif strategy == "mom12":
+            queryset = Stock.objects.filter(index_id=index[0]).order_by("-momentum_12_2")[:6]
+        serializer = StockSerializer(queryset, many=True).data
+        return Response(serializer)
+
+
+
+
+class DJ30BestMom(viewsets.ViewSet):
+    """
+    DJ30 best stocks sorted by momentum_12_2
+    """
+    authenticated_classes = [BasicAuthentication]
+    permission_classes = [AllowAny]
+
+    def list(self, request):
+        index = Index.objects.filter(name="DJ30").values_list('id', flat=True)
+        queryset = Stock.objects.filter(index_id=index[0]).order_by('-momentum_12_2')[:6]
+        serializer = StockMomSerializer(queryset, many=True).data
+        return Response(serializer)
+
+
 class DJ30BestAvg(viewsets.ViewSet):
     """
     DJ30 best 6 stocks sorted by avg_mom
@@ -42,7 +76,7 @@ class DJ30BestAvg(viewsets.ViewSet):
     def list(self, request):
         index = Index.objects.filter(name="DJ30").values_list('id', flat=True)
         queryset = Stock.objects.filter(index_id=index[0]).order_by('-momentum_avg')[:6]
-        serializer = StockSerializer(queryset, many=True)
+        serializer = StockAvgMomentumSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -71,7 +105,7 @@ class DJ30Div(viewsets.ViewSet):
     def list(self, request):
         index = Index.objects.filter(name="DJ30").values_list('id', flat=True)
         queryset = Stock.objects.filter(index_id=index[0]).order_by("-div_p")
-        serializer = StockSerializer(queryset, many=True)
+        serializer = StockDivSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -85,8 +119,22 @@ class SP500BestAvg(viewsets.ViewSet):
     def list(self, request):
         index = Index.objects.filter(name="SP500").values_list('id', flat=True)
         queryset = Stock.objects.filter(index_id=index[0]).order_by("-momentum_avg")[:20]
-        serializer = StockSerializer(queryset, many=True)
+        serializer = StockAvgMomentumSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class SP500BestMom(viewsets.ViewSet):
+    """
+    SP500 Best stocks list order by momentum_12_2
+    """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [AllowAny]
+
+    def list(self, request):
+        index = Index.objects.filter(name="SP500").values_list('id', flat=True)
+        queryset = Stock.objects.filter(index_id=index[0]).order_by("-momentum_12_2")[:20]
+        serializer = StockMomSerializer(queryset, many=True).data
+        return Response(serializer)
 
 
 class SP500BestDiv(viewsets.ViewSet):
@@ -99,7 +147,7 @@ class SP500BestDiv(viewsets.ViewSet):
     def list(self, request):
         index = Index.objects.filter(name="SP500").values_list('id', flat=True)
         queryset = Stock.objects.filter(index_id=index[0]).order_by("-div_p")[:20]
-        serializer = StockSerializer(queryset, many=True)
+        serializer = StockDivSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
