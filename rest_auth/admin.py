@@ -5,7 +5,7 @@ from rest_auth.models import User
 
 class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'username')
-    list_filter = ('email',)
+    list_filter = ('email', 'is_staff')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('username',)}),

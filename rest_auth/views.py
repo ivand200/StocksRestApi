@@ -17,7 +17,14 @@ from rest_framework.generics import CreateAPIView
 
 
 # Create your views here.
+class UserCreateSet(CreateAPIView):
+    authemtication_classes = [BasicAuthentication]
+    permission_classes = [AllowAny]
 
+    serializer_class = UserSerializer
+
+
+"""
 class UserViewSet(viewsets.ModelViewSet):
     authentication_classes = [BasicAuthentication]
     permission_classes = [AllowAny]
@@ -26,10 +33,4 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Post.objects.filter(author=user)
-
-
-class UserCreateSet(CreateAPIView):
-    authemtication_classes = [BasicAuthentication]
-    permission_classes = [AllowAny]
-
-    serializer_class = UserSerializer
+"""

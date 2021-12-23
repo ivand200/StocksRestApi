@@ -1,8 +1,8 @@
 from indexes.models import Etf
 import json
-from scripts.test import Momentum_12_1, Avg_Momentum, Ma10, Momentum_3
+from .defs import Momentum_12_1, Avg_Momentum, Ma10, Momentum_3
 
-etf_list = ["LQD", "HYG", "SHV", "SPY", "DJI", "IAU"]
+etf_list = ["LQD", "HYG", "SHV", "SPY", "DJI", "IAU", "DAX", "^N225", "IMOEX.ME"]
 
 def run():
     Etf.objects.all().delete()

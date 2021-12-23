@@ -32,7 +32,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Investment blog Swagger",
         default_version='v1',
-        description="API description for AgroHub Backend",
+        description="API description ",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="xxxxxxx@gmail.com"),
     ),
@@ -50,7 +50,6 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('ip/', get_ip),
 
-    path('auth/', UserCreateSet.as_view()),
 ]
 
 if settings.DEBUG:

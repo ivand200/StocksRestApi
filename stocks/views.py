@@ -50,8 +50,6 @@ class DJ30Invest(APIView):
         return Response(serializer)
 
 
-
-
 class DJ30BestMom(viewsets.ViewSet):
     """
     DJ30 best stocks sorted by momentum_12_2

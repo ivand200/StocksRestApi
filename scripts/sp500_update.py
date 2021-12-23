@@ -1,7 +1,7 @@
 from stocks.models import Stock, Index
 import csv
 import json
-from scripts.test import Ep, Pe, Div_p, Ma10, Momentum_12_1, Avg_Momentum, Low_range, Momentum_12_2
+from .defs import Ep, Pe, Div_p, Ma10, Momentum_12_1, Avg_Momentum, Low_range, Momentum_12_2
 
 def run():
     try:

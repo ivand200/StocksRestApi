@@ -4,11 +4,11 @@ from .models import Etf
 class EtfSerializer(ModelSerializer):
     class Meta:
         model = Etf
-        fields = '__all__'
+        fields = "__all__"
 
 
 class EtfBondSerializer(ModelSerializer):
 
     class Meta:
         model = Etf
-        fields = ['ticker' ,'momentum_3']
+        fields = ['ticker' ,'momentum_3', 'ma10']

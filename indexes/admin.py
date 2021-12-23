@@ -7,4 +7,3 @@ from indexes.models import Etf
 class EtfAdmin(admin.ModelAdmin):
     list_display = ['ticker', 'momentum_12_1', 'momentum_avg', 'momentum_3', 'ma10']
     search_fields = ['ticker']
-    

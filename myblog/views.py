@@ -1,9 +1,6 @@
-from django.shortcuts import render
 from django.http import request, JsonResponse, Http404
+from django.shortcuts import get_object_or_404
 from .models import Post
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import PostSerializer
@@ -14,12 +11,13 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.decorators import permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_auth.models import User
+from .permissions import IsAdminUserForObject, IsStaffPermission, AuthorModifyOrReadOnly
 # Create your views here.
 
 
 class PostViewSet(viewsets.ModelViewSet):
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AuthorModifyOrReadOnly]
     serializer_class = PostSerializer
 
     def get_queryset(self):
@@ -32,6 +30,37 @@ class PostViewSet(viewsets.ModelViewSet):
         new_post = Post.objects.create(author=user, title=request.data['title'], content=request.data['content'])
         new_post.save()
         return Response("new post")
+
+
+class PostListView(viewsets.ViewSet):
+    """
+    Get all posts
+    """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsStaffPermission]
+
+    def list(self, request):
+        posts = Post.objects.all().order_by('-created_at')
+        serializer_posts = PostSerializer(posts, many=True).data
+        return Response(serializer_posts)
+
+    def retrieve(self, request, pk=None):
+        queryset = Post.objects.all()
+        post = get_object_or_404(queryset, pk=pk)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        queryset = Post.objects.get(pk=pk)
+        serializer = PostSerializer(queryset, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        queryset = Post.objects.get(pk=pk)
+        queryset.delete()
+        return Response('post was deleted')
 
 
 class NewUser(viewsets.ViewSet):
